@@ -1,12 +1,15 @@
 export default [
   {
     path: '/',
-    component: () => import('./components/home'),
+    component: () => import('./components/Home'),
     name: 'LandingPage',
     meta: {
       dashboardMenu: {
         name: 'Home',
-        icon: '',
+        icon: 'mdi-home',
+      },
+      themeColor: {
+        primary: '#FFF4D8',
       },
     },
   },
