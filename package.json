@@ -1,6 +1,6 @@
 {
   "name": "lets-party-game-house",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -33,5 +33,6 @@
     "vue-cli-plugin-vuetify": "~2.4.3",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.7.0"
-  }
+  },
+  "license": "MIT"
 }

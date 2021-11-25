@@ -6,7 +6,7 @@
       <ApplicationList class="col-12" />
     </div>
 
-    <div class="mb-9">
+    <div class="mb-8">
       <ApplicationFeedback />
     </div>
   </div>

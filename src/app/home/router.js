@@ -11,6 +11,8 @@ export default [
       themeColor: {
         primary: '#FFF4D8',
       },
+      fullMWidthLayout: true,
+      showLegalFooter: true,
     },
   },
 ]
