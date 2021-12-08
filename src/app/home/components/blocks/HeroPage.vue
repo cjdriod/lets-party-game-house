@@ -9,9 +9,11 @@
         </div>
       </div>
 
-      <div class="mb-5">
+      <div v-if="monthlyRecommendation" class="mb-5">
         <div class="mb-2">- Recommendation for the month -</div>
-        <v-btn color="red lighten-4" x-large rounded>Who is my santa</v-btn>
+        <v-btn color="red lighten-4" x-large rounded :to="monthlyRecommendation.link">
+          {{ monthlyRecommendation.title }}
+        </v-btn>
       </div>
     </v-col>
 
@@ -25,12 +27,22 @@
 
 <script>
 import LandingImage from '@/assets/img/Solidarity-pana.svg'
+import Helpers from '@/helpers'
+
 export default {
   name: 'HeroPage',
+  props: {
+    recommendedApp: { type: Object },
+  },
   data() {
     return {
       landingImage: LandingImage,
     }
+  },
+  computed: {
+    monthlyRecommendation() {
+      return Helpers.getValues(this.recommendedApp, 'meta.applicationDetails')
+    },
   },
 }
 </script>

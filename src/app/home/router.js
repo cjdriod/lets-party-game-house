@@ -5,7 +5,7 @@ export default [
     name: 'LandingPage',
     meta: {
       dashboardMenu: {
-        name: 'Home',
+        title: 'Home',
         icon: 'mdi-home',
       },
       themeColor: {

@@ -2,10 +2,10 @@
   <v-app>
     <v-app-bar app elevate-on-scroll color="white">
       <v-app-bar-nav-icon @click="toggleAppDrawer" />
-      <v-toolbar-title>Let's Party</v-toolbar-title>
+      <v-toolbar-title>{{ getAppTitle }}</v-toolbar-title>
     </v-app-bar>
 
-    <v-navigation-drawer app v-model="isOpenAppDrawer">
+    <v-navigation-drawer v-model="isOpenAppDrawer" app>
       <div class="px-3">
         <h1 class="text-h2 my-5 mb-7">Let's Party</h1>
         <div>
@@ -31,7 +31,7 @@
         <v-list-item-group>
           <v-list-item v-for="(route, index) in getDashboardMenuRouteLink" :key="index" :to="route.uri" color="primary">
             <v-list-item-icon>
-              <v-icon>mdi-google-controller</v-icon>
+              <v-icon>{{ route.icon }}</v-icon>
             </v-list-item-icon>
             <v-list-item-title>{{ route.title }}</v-list-item-title>
           </v-list-item>
@@ -52,7 +52,7 @@
       </v-container>
     </v-main>
 
-    <v-footer app inset class="py-6" absolute>
+    <v-footer v-if="!useAppFooterStatus" app inset class="py-6" absolute>
       <Footer :routes="getRoutes" :show-legal="getLegalFooterDisplayStatus" />
     </v-footer>
   </v-app>
@@ -79,10 +79,13 @@ export default {
       return this.$router.options.routes || []
     },
     getDashboardMenuRouteLink() {
-      return this.getRoutes.map((route) => ({
-        title: Helpers.getValues(route, 'meta.dashboardMenu.name', ''),
-        uri: route.path,
-      }))
+      return this.getRoutes
+        .filter((route) => Helpers.getValues(route, 'meta.dashboardMenu'))
+        .map((item) => ({
+          title: item.meta.dashboardMenu.title || 'untitled',
+          uri: item.path || '#',
+          icon: item.meta.dashboardMenu.icon || 'mdi-flask',
+        }))
     },
     getLayoutMode() {
       return (Helpers.getValues(this.$route, 'meta.fullMWidthLayout') && 'full-m-width') || ''
@@ -90,8 +93,13 @@ export default {
     getLegalFooterDisplayStatus() {
       return Helpers.getValues(this.$route, 'meta.showLegalFooter')
     },
+    useAppFooterStatus() {
+      return Helpers.getValues(this.$route, 'meta.useAppFooter')
+    },
+    getAppTitle() {
+      return Helpers.getValues(this.$route, 'meta.appTitle', `Let's Party`)
+    },
   },
-
   methods: {
     toggleAppDrawer() {
       this.isOpenAppDrawer = !this.isOpenAppDrawer
@@ -99,3 +107,5 @@ export default {
   },
 }
 </script>
+
+<style lang="scss" src="./styles/main.scss"></style>

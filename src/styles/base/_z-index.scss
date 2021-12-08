@@ -1,0 +1,5 @@
+@for $idx from -1 through 2 {
+  .z-index-#{$idx} {
+    z-index: $idx;
+  }
+}

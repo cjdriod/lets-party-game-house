@@ -1,0 +1,5 @@
+@for $idx from 0 through 10 {
+  .opacity-#{$idx} {
+    opacity: $idx * 0.1;
+  }
+}
