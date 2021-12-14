@@ -7,9 +7,15 @@
           rounded
           outlined
           :value="playerName"
-          :label="`Player ${index + 1}`"
+          v-validate="'required'"
+          :name="`player_${index + 1}`"
+          :label="`player ${index + 1}`"
           hint="Player nickname must be unique"
-          :error-messages="getErrors[`${inputFieldPrefix}${index}`]"
+          :data-vv-as="`player ${index + 1} nickname`"
+          :error-messages="
+            (errors.first(`player_${index + 1}`) && enhanceErrorMsg(index)) ||
+            getErrors[`${inputFieldPrefix}_${index + 1}`]
+          "
           @input="
             (val) => {
               editPlayerName(val, index)
@@ -29,6 +35,10 @@
               @click="toggleRemovePlayerDialog(index)"
             >
               mdi-account-remove-outline
+            </v-icon>
+
+            <v-icon v-show="!playerName && index >= minInput" v-ripple color="error" @click="removePlayer(index)">
+              mdi-trash-can-outline
             </v-icon>
           </template>
         </v-text-field>
@@ -69,8 +79,10 @@
 <script>
 export default {
   name: 'PlayerListForm',
+  inject: ['$validator'],
   props: {
     value: { type: Array, default: () => [null] },
+    minInput: { type: [Number, String], default: 0 },
   },
   data() {
     return {
@@ -120,15 +132,12 @@ export default {
       immediate: true,
     },
   },
-  mounted() {},
   methods: {
     validatePlayerName(name, index) {
-      const errorKey = `${this.inputFieldPrefix}${index}`
+      const errorKey = `${this.inputFieldPrefix}_${index + 1}`
       const errors = { ...this.errorBag }
 
-      if (!name.trim()) {
-        errors[errorKey] = 'Player nickname is required'
-      } else if (this.needErrorCheck) {
+      if (this.needErrorCheck) {
         const hasDuplicate = this.getPlayerList.filter((player) => player === name).length > 1
 
         if (hasDuplicate) {
@@ -150,6 +159,8 @@ export default {
             this.validatePlayerName(name, this.getPlayerList.length - (idx + 1))
           }
         })
+
+      this.scrollToErrorField()
     },
     removePlayer(index) {
       this.removeStatus = true
@@ -181,6 +192,18 @@ export default {
     removePlayerAction() {
       this.removePlayer(this.removePlayerDialogMeta.playerIndex)
       this.toggleRemovePlayerDialog()
+    },
+    scrollToErrorField() {
+      this.$nextTick(() => {
+        const firstErrorKey = Object.keys(this.getErrors)[0]
+        firstErrorKey &&
+          document.getElementsByName(firstErrorKey)[0].scrollIntoView({ behavior: 'smooth', block: 'center' })
+      })
+    },
+    enhanceErrorMsg(index) {
+      return `${this.errors.first(`player_${index + 1}`)} ${
+        index >= this.minInput ? '/ or click on remove icon to remove this slot' : ''
+      }`
     },
   },
 }

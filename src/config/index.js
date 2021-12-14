@@ -5,4 +5,10 @@ export default {
     email: 'jacklim.cj@gmail.com', // update COC if you change email
   },
   licenseYear: process.env.VUE_APP_LICENSE_YEAR || new Date().getFullYear(),
+  santaApp: {
+    cardPresentationMaxPlayer:
+      process.env.VUE_APP_SANTA_CARD_PRESENTATION_MAX_PLAYER === undefined
+        ? 10
+        : Number(process.env.VUE_APP_SANTA_CARD_PRESENTATION_MAX_PLAYER),
+  },
 }
